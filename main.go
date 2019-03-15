@@ -73,7 +73,7 @@ func main() {
 	// Defer closing the file until parsed
 	defer configFile.Close()
 
-	// Read the config
+	// Read the config file
 	byteValue, _ := ioutil.ReadAll(configFile)
 
 	var tokens Config
