@@ -91,6 +91,6 @@ func main() {
 	// Handle a simple test route
 	r.HandleFunc("/{one}/{two}", TestHandler).Methods("GET")
 
-	// Start listening for incoming request and logging if something goes wrong
+	// Start listening for incoming request and logging if something is wrong
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
