@@ -1,5 +1,5 @@
 <div align="center">
-    <p><img src="https://img.kirameki.one/zFRv4GeL.png"></p>
+    <p><img src="https://img.kirameki.one/zFRv4GeL.png" width="600"></p>
 </div>
 
 # About
