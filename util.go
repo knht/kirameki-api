@@ -5,9 +5,11 @@ import "net/http"
 // CheckIfAuthorized Check if a request is authorized.
 func CheckIfAuthorized(w http.ResponseWriter, r *http.Request) bool {
 	if r.Header.Get("Authorization") == "" {
+		w.WriteHeader(401)
 		w.Write([]byte(`{ "error": "Unauthorized. Please make sure your authorization token is set correctly." }`))
 		return false
 	} else if r.Header.Get("Authorization") != "" && !Contains(authtokens, r.Header.Get("Authorization")) {
+		w.WriteHeader(401)
 		w.Write([]byte(`{ "error": "Unauthorized. Please make sure your authorization token is set correctly." }`))
 		return false
 	}
