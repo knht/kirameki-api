@@ -8,14 +8,18 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/common-nighthawk/go-figure"
 	"github.com/gorilla/mux"
 )
 
 var authtokens = []string{}
+var weebToken string
+var port = "28785"
 
 // Config struct for auth tokens
 type Config struct {
-	Tokens []string `json:"tokens"`
+	Tokens      []string `json:"tokens"`
+	WeebshToken string   `json:"weebshToken"`
 }
 
 func main() {
@@ -42,6 +46,9 @@ func main() {
 		authtokens = append(authtokens, tokens.Tokens[i])
 	}
 
+	// Set weeb.sh config token
+	weebToken = tokens.WeebshToken
+
 	// Instantiate new mux router
 	r := mux.NewRouter()
 
@@ -51,6 +58,14 @@ func main() {
 	// Handle weeb.sh API
 	r.HandleFunc("/weebsh/{type}", WeebshHandler).Methods("GET")
 
+	// Boot up logo & information
+	bootLogo := figure.NewFigure("kirAPI", "speed", true)
+	bootLogo.Print()
+	fmt.Println("\nNow running on port " + port)
+
+	// Authenticate with weeb.sh
+	WeebAuth()
+
 	// Start listening for incoming request and logging if something is wrong
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
