@@ -37,11 +37,11 @@ func WeebshHandler(w http.ResponseWriter, r *http.Request) {
 
 	url := ri.Url
 
-	test := `
+	result := `
 		{
 			"url": "` + url + `"
 		}
 	`
 
-	w.Write([]byte(test))
+	w.Write([]byte(result))
 }
