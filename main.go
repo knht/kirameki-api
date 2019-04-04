@@ -24,12 +24,7 @@ func TestHandler(w http.ResponseWriter, r *http.Request) {
 	// Set application header to JSON
 	w.Header().Add("Content-Type", "application/json")
 
-	// Check for adequate authorization
-	if r.Header.Get("Authorization") == "" {
-		w.Write([]byte(`{ "error": "Unauthorized. Please make sure your authorization token is set correctly." }`))
-		return
-	} else if r.Header.Get("Authorization") != "" && !Contains(authtokens, r.Header.Get("Authorization")) {
-		w.Write([]byte(`{ "error": "Unauthorized. Please make sure your authorization token is set correctly." }`))
+	if !CheckIfAuthorized(w, r) {
 		return
 	}
 
@@ -48,17 +43,6 @@ func TestHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Send the result
 	w.Write([]byte(workerResult))
-}
-
-// Contains simple function to check if an element exists within a slice
-func Contains(a []string, x string) bool {
-	for _, n := range a {
-		if x == n {
-			return true
-		}
-	}
-
-	return false
 }
 
 func main() {
@@ -89,7 +73,10 @@ func main() {
 	r := mux.NewRouter()
 
 	// Handle a simple test route
-	r.HandleFunc("/{one}/{two}", TestHandler).Methods("GET")
+	r.HandleFunc("/test/{one}/{two}", TestHandler).Methods("GET")
+
+	// Handle weeb.sh API
+	r.HandleFunc("/weebsh/{type}", WeebshHandler).Methods("GET")
 
 	// Start listening for incoming request and logging if something is wrong
 	log.Fatal(http.ListenAndServe(":8000", r))
